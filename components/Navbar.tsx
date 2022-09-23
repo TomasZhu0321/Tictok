@@ -10,7 +10,8 @@ import { IoMdAdd } from "react-icons/io";
 import { createOrGetUser } from "../utils";
 import useAuthStore from "../store/authStore";
 const Navbar = () => {
-  const {userProfile,addUser} =useAuthStore()
+  const {userProfile,addUser} =useAuthStore();
+  const user = false;
   return (
 
     <div className="w-full flex justify-between items-center border-black border-b-2 py-2 px-4">
@@ -25,17 +26,16 @@ const Navbar = () => {
         </div>
       </Link>
       <div> SEARCH</div>
-      {/* <div>
-        {userProfile ?(
-          <div>{userProfile?.userName}</div>
-        ):(
+      <div>
+        {user ?(
+          <div> Logged In</div>
+        ) : (
           <GoogleLogin 
-          onSuccess={(response)=>{createOrGetUser(response,addUser)}}
-          onError={()=>console.log('Error')}
+          onSuccess={(response) => createOrGetUser(response,user)}
+          onError ={()=> console.log('Error')}
           />
-         
         )}
-      </div> */}
+      </div>
     </div>
   );
 };
