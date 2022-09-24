@@ -29,7 +29,7 @@ const VideoCard: NextPage<IProps> = ({ post }) => {
       <div>
         <div className="flex gap-3 p-2 cursor-pointer font-semibold rounded ">
           <div className="md:w-16 md:h-16 w-10 h-10">
-            <Link href="/">
+            <Link href='/'>
               <>
                 <Image
                   width={62}
@@ -63,11 +63,11 @@ const VideoCard: NextPage<IProps> = ({ post }) => {
             }}
             className="rounded-3xl"
           >
-            <Link href="/">
+            <Link href={`/detail/${post._id}`}>
               <video
                 loop
                 ref={videoRef}
-                className="lg:w[600px] h-[300px] md:h-[400px] lg:h-[530px] w-[200px] rounded-2xl cursor-pointer bg-gray-100"
+                className="lg:w-[600px] h-[300px] md:h-[400px] lg:h-[530px] w-[200px] rounded-2xl cursor-pointer bg-gray-100"
                >
                 <source src={post.video.asset.url}></source>
                </video>
