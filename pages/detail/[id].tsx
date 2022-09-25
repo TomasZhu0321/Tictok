@@ -106,7 +106,7 @@ const Detail = ({ postDetails }: IProps) => {
         <div className="relative w-[1000px] md:w-[900px] lg:w-[700px]">
           <div className="lg:mt-20 mt-10">
             <div className="flex gap-3 p-2 cursor-pointer font-semibold rounded ">
-              <div className="ml-4 md:w-20 md:h-20 w-16 h-10">
+              <div className="ml-4 md:w-20 md:h-20 w-10 h-10 ">
                 <Link href="/">
                   <>
                     <Image
@@ -132,7 +132,7 @@ const Detail = ({ postDetails }: IProps) => {
               </div>
             </div>
             <div>
-              <p className="px-10 text-lg text-gray-600">{post.caption}</p>
+              <p className="px-10 text-lg text-gray-600 ">{post.caption}</p>
             </div>
             {/* like button */}
             <div className="mt-10 px-10">
