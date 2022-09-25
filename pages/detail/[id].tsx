@@ -21,7 +21,7 @@ const Detail = ({ postDetails }: IProps) => {
   const [post, setPost] = useState(postDetails); //details page的info
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [comment, setComment] = useState("");
-  const [isPost, setisPost] = useState(false);
+  const [isPostingComment, setIsPostingComment] = useState<boolean>(false);
   const [muted, setVideMute] = useState<boolean>(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const onVideoClick = () => {
@@ -51,17 +51,17 @@ const Detail = ({ postDetails }: IProps) => {
       setPost({ ...post, likes: data.likes }); //update likes
     }
   };
-  const addComment = async (e: any) => {
+  const addComment = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     if (userProfile && comment) {
-      setisPost(true);
+      setIsPostingComment(true);
       const response = await axios.put(`${BASE_URL}/api/post/${post._id}`, {
         userId: userProfile._id,
         comment,
       });
-      setPost({ ...post, comments: response.data.comment });
+      setPost({ ...post, comments: response.data.comments });
       setComment('');
-      setisPost(false);
+      setIsPostingComment(false);
     }
   };
 
@@ -164,7 +164,7 @@ const Detail = ({ postDetails }: IProps) => {
             comment ={comment}
             setComment={setComment}
             addComment={addComment}
-            isPostingComment={isPost}
+            isPostingComment={isPostingComment}
             comments={post.comments}
             />
           </div>
