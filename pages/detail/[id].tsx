@@ -11,14 +11,16 @@ import { BASE_URL } from "../../utils/index";
 import useAuthStore from "../../store/authStore";
 import { Video } from "../../types";
 import axios from "axios";
+import Comments from "../../components/Comments";
+import LikeButton from "../../components/LikeButton";
 
 interface IProps {
   postDetails: Video;
 }
 const Detail = ({ postDetails }: IProps) => {
-  const [post, setPost] = useState(postDetails);
+  const [post, setPost] = useState(postDetails); //details page的info
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
-  const [muted, setVideMute] = useState(false);
+  const [muted, setVideMute] = useState<boolean>(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const onVideoClick = () => {
     if (isPlaying) {
@@ -30,11 +32,24 @@ const Detail = ({ postDetails }: IProps) => {
     }
   };
   useEffect(() => {
-    if (videoRef?.current) {
+    if (post && videoRef?.current) {
       videoRef.current.muted = !muted;
     }
-  }, [muted]);
+  }, [muted, post]);
   const router = useRouter();
+  const { userProfile }: any = useAuthStore();
+
+  const handleLike = async (like: boolean) => {
+    if (userProfile) {
+      const { data } = await axios.put(`${BASE_URL}/api/like`, {
+        userId: userProfile._id,
+        postId: post._id,
+        like,
+      }); //传进去的body
+      setPost({ ...post, likes: data.likes }); //update likes
+    }
+  };
+
   return (
     <>
       <div className="flex w-full absolute left-0 top-0 bg-white flex-wrap lg:flex-nowrap">
@@ -116,7 +131,19 @@ const Detail = ({ postDetails }: IProps) => {
                 </Link>
               </div>
             </div>
-            <p className="px-10 text-lg text-gray-600">{post.caption}</p>
+            <div>
+              <p className="px-10 text-lg text-gray-600">{post.caption}</p>
+            </div>
+            {/* like button */}
+            <div className="mt-10 px-10">
+              {userProfile && (
+                <LikeButton
+                  likes={post.likes}
+                  handleLike={() => handleLike(true)}
+                  handleDislike={() => handleLike(false)}
+                />)}
+            </div>
+            <Comments />
           </div>
         </div>
       </div>
