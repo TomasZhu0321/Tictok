@@ -20,6 +20,8 @@ interface IProps {
 const Detail = ({ postDetails }: IProps) => {
   const [post, setPost] = useState(postDetails); //details page的info
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const [comment, setComment] = useState("");
+  const [isPost, setisPost] = useState(false);
   const [muted, setVideMute] = useState<boolean>(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const onVideoClick = () => {
@@ -47,6 +49,19 @@ const Detail = ({ postDetails }: IProps) => {
         like,
       }); //传进去的body
       setPost({ ...post, likes: data.likes }); //update likes
+    }
+  };
+  const addComment = async (e: any) => {
+    e.preventDefault();
+    if (userProfile && comment) {
+      setisPost(true);
+      const response = await axios.put(`${BASE_URL}/api/post/${post._id}`, {
+        userId: userProfile._id,
+        comment,
+      });
+      setPost({ ...post, comments: response.data.comment });
+      setComment('');
+      setisPost(false);
     }
   };
 
@@ -141,9 +156,17 @@ const Detail = ({ postDetails }: IProps) => {
                   likes={post.likes}
                   handleLike={() => handleLike(true)}
                   handleDislike={() => handleLike(false)}
-                />)}
+                />
+              )}
             </div>
-            <Comments />
+            {/* comment */}
+            <Comments 
+            comment ={comment}
+            setComment={setComment}
+            addComment={addComment}
+            isPostingComment={isPost}
+            comments={post.comments}
+            />
           </div>
         </div>
       </div>
