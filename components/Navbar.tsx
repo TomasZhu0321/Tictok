@@ -10,6 +10,7 @@ import { IoMdAdd } from "react-icons/io";
 import { createOrGetUser } from "../utils";
 import useAuthStore from "../store/authStore";
 
+
 const Navbar = () => {
   const {userProfile,removeUser,addUser} =useAuthStore();
   const [searchValue,setSearchValue] = useState('');
@@ -17,9 +18,18 @@ const Navbar = () => {
   const handleSearch=(e:{preventDefault:()=>void})=>{
     e.preventDefault();
     if(searchValue){
-      router.push(`/search/${searchValue}`)
+      router.push(`/search/${searchValue}`);
+    }}
+    //debounce function
+    let searchTime:any ;
+    const debounceFuntion = (query: any) =>{
+      clearTimeout(searchTime);
+      if (!query) return setSearchValue('');
+      searchTime = setTimeout(()=>{setSearchValue(query)},2000);
     }
-  }
+
+
+  console.log('===>',searchValue);
   return (
 
     <div className="w-full flex justify-between items-center border-black border-b-2 py-2 px-4">
@@ -37,7 +47,7 @@ const Navbar = () => {
       <form 
         onSubmit={handleSearch} 
         className='absolute md:static top-10 -left-20 bg-white  '>
-        <input type="text" value={searchValue} onChange={(e)=>{setSearchValue(e.target.value)}} placeholder="Search accounts and videos" className="bg-primary p-3 md:text-md font-medium border-gray-100 border-2 focus:outline-none focus:border-2 focus:border-black w-[300px] rounded-2xl md:w-[350px] md:top-0"></input>
+        <input type="text"  onChange={e=>debounceFuntion(e.target.value)} placeholder="Search accounts and videos" className="bg-primary p-3 md:text-md font-medium border-gray-100 border-2 focus:outline-none focus:border-2 focus:border-black w-[300px] rounded-2xl md:w-[350px] md:top-0"></input>
         <button className="absolute md:right-5 top-4 right-6 border-l-2 border-black pl-4" onClick={handleSearch}>
           <BiSearch className="text-2xl"/>
         </button>
